@@ -1,0 +1,158 @@
+Aprendizaje no supervisado (Clase)
+
+2da parte
+Aprendizaje no supervisado
+Ensambles
+Aprendizaje por refuerzo
+Redes Neuronales
+Algunas aplicaciones
+
+Supervisado: Tenemos una variable objetivo, instancias etiquetadas para entrenar
+Regresion vs Clasificación
+
+No supervisado: Instancias no etiquetadas
+Visualizar datos, entender o resumir
+Clustering, Reduccion de la dimension (PCA, T-SNE, MDS, ISOMAP)
+
+SuP : {xi, c(xi)}
+Objetivo: Encontrar una hipotesis que satisfaga los datos
+
+NSup : {xi}
+Objetivo: Algoritmo encuentre la estructura
+
+Algoritmos de aprendizaje Supervisado:
+Arboles de decision
+Naive Bayes
+LDA Linear discriminant analysis
+SVM Support Vector Machines
+Regresion Logistica (Enfoque estadistico)
+KNN (k Nearest Neightbourgs)
+NN (RN - Tambien hay no supervisados)
+Ensambles (Combinaciones)
+
+No Sup
+Clustering
+Reduccion de dimensionalidad.
+
+Clustering
+Encontrar grupos de datos a partir de la informacion de los datos, que describan las relaciones.
+
+Informacion es parecida entre los elementos del cluster, y diferente de otros clusters.
+ADN de individuos, segmentar el mercado, analisis de redes sociales
+
+Tipos de clustering:
+particion/jerarquicos
+exclusivos/no exclusivos
+
+De particion: se clasifican n datos en k cluster. Cada cluster satisface requerimientos de una particion. Cada dato esta solo en un cluster. Cada cluster tiene al menos un dato
+Jerarquicos: 
+	Aglomerativos (bottom up), se van agreupando de auno, desde la hoja
+	Divisorios (TopDown), se va partiendo en clusters hasta que queden clusters de una hoja
+
+K-means (particion)
+entrada: K (clusters) y n datos no etiquetados (pertenece a Rn). Pueden ser categoricos pero funca mejor para numericos.
+Se buscan los "centroides", puntos que esten a la menor distancia posible de cada uno de los clusters.
+Primero se asignan aleatoriamente,
+Luego se asigna el cluster por la distancia al centroide (para cada dato)
+Cuando todos los datos los asigne a su centroide se mueve el centroide al promedio de datos.
+Luego se itera. Hasta que los centroides no se muevan mas. (o Hasta que no haya muchos cambios de elementos en los clusters)
+Si un cluster no tiene puntos, eliminamos el centroide, o lo movemos al azar.
+Hace una optimización de una función de costo. Tambien llamada funcion de distorción.
+
+aik es 0 si el punto no pertenece al cluster (en la funcion de costo)
+
+Problemas no necesariamente bien separados.
+Si la dimension es mayor a 3 tengo un problema.
+
+Inicializacion de KMeans (K<m)
+-> Centroides: Al azar o elegir K datos de mi conjunto.
+Puede tener soluciones malas (minimo local de la funcion de costo)
+
+Hacer multiples inicializaciones al azar para evitar optimos locales.
+
+Hacer entre 50 y 1000 veces, inicial centroides y correr k-means y calcular la funcion de costo.
+Muy util con K chicos (<10)
+Otra opción: Usar k clusters de un metodo jerarquico e inicializar con sus centroides.
+
+Distancias
+No negativa
+Simetrica
+Desigualdad triangular
+Si distancia = 0 -> x=y
+
+Distancia euclidea
+Distancia de Manhattan (Cuadras)
+Distancia de Chebychev (Distancia a todos los adyacentes es 1)
+
+Atribuos discretos: Value Difference Metric (VDM)
+
+Otras distancias: Similaridad de coseno, Jackard distance (docs), Hamming distance, Levensthein distance (cadenas de caracteres)
+Levenshtein: minimo de numero de ediciones de caracteres oara que sean iguales (Distancia de edición)
+DistanciaL (Honda, Hyundai) = 3
+
+Eleccion del K
+Manualmente (Visualizar, no tan facil)
+Elbow method
+Evaluar con una metrica y ver cuan bien funciona para proposito posterior
+
+Elbow method:
+Distribucion de potencia, hay un codo, no siempre es util, aveces no tiene codo, es redondeado, o una recta, o una panza.
+
+Probar con K=X e ir iterando para ver cual me sirve más. Con imagenes, cuanto mas comprimo, peor se ve cuando reconstruyo, esa esa una buena metrica.
+
+Ventajas kmeans:
+Simple
+Eficiente
+Guarda poca info
+Es lineal
+
+Desventaja
+Sensible a la eleccion de centroides
+Sensible al ruido y outliers
+Hay que especificar el K
+
+----
+
+Expectation Maximization y Mezcla de Gaussianas
+
+Gaussian Mixture Models
+Asumimos un overlap (soft clustering). Los eleementos tienen una probabilidad de estar en distintos cluster
+
+Cada cluster corresponde a una distro de proba (normal).
+
+Se requieren descubrir media y varianza.
+
+Kmeans pero dice la probabilidad de que un elemento esté en una clase o en otra.
+
+Reconocimiento del habla. (Se usa muchisimo)
+
+------
+
+Clustering jerarquico
+
+Se suele mostrar en un diagrama de arbol, llamado dendograma.
+Hay aglomerativos y divisorios. Vemos los aglomerativos (topdown)
+
+Empiezan con n clusters = m cantidad de elementos. Se van combinando de a uno hasta tener un cluster con m observaciones
+Single linkage. Voy agrupando de a uno con la minima distancia (Uso distancia de todos con todos, y me quedo la minima)
+Distance( C1, C2 ) = min d(xi, xj). Cualquiera de los puntos mas cercanos dentro de los clusters.
+Busco la distancia entre todos los puntos contra todos los puntos del otro cluster.
+Repito hasta que haya un solo cluster.
+
+Hay otros métodos para la distancia entre clusters:
+
+MAX (Complete Link) Busca la maxima distancia entre putnos de distintos clusters
+
+AVG (Promedio de distancia del cluster
+
+Distancia entre centroides.
+
+Tienen distintas utilidades.
+
+Ventajas
+No asume ningun numero de clusters, se pueden obtener los que queramos cortando el dedograma
+Pueden corresponder a taxonomias
+
+Desventajas
+Es sensible a los outliers
+Es caro y necesita mucho procesamiento.
